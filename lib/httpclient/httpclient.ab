@@ -1,0 +1,46 @@
+import {len} from "std"
+
+#[allow_generic_return]
+pub fun request(method: Text, host: Text, path: Text, data: Text) {
+	let headers = [Text]
+
+	$exec 3<>/dev/tcp/{host}/80$ failed {
+		echo "ERROR: failed to open tcp socket to {host}"
+	}
+
+	if {
+		method == "POST" {
+			headers = [
+				"{method} /{path} HTTP/1.1",
+				"Host: {host}",
+				"Content-Type: application/x-www-form-urlencoded",
+				"Content-Length: {len(data)}",
+				"Connection: close",
+				"",
+				"{data}"
+			]
+		}
+
+		method == "GET" {
+			headers = [
+				"{method} /{path} HTTP/1.1",
+				"Host: {host}",
+				"Connection: close",
+				""
+			]
+		}
+
+		else {
+			echo "ERROR: provided method '{method}' is not accepted"
+		}
+	}
+
+	loop i in headers {
+		$echo "{i}" >&3$?
+	}
+
+	unsafe $while read -r data <&3; do echo "response: $data$"; done$
+
+	unsafe $exec 3>&-$
+
+}
