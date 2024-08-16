@@ -5,7 +5,7 @@ pub fun request(method: Text, host: Text, path: Text, data: Text) {
 	let headers = [Text]
 
 	$exec 3<>/dev/tcp/{host}/80$ failed {
-		echo "ERROR: failed to open tcp socket to {host}"
+		echo "ERROR: failed to open TCP socket to {host}"
 	}
 
 	if {
@@ -39,8 +39,6 @@ pub fun request(method: Text, host: Text, path: Text, data: Text) {
 		$echo "{i}" >&3$?
 	}
 
-	unsafe $while read -r data <&3; do echo "response: $data$"; done$
-
+	unsafe $while read -r data <&3; do echo "response: \$data\"; done$
 	unsafe $exec 3>&-$
-
 }
