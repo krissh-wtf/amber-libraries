@@ -1,5 +1,6 @@
-# amber-httpclient
-a POSIX-compliant http client library for bash/[amber](https://amber-lang.org) without using external dependencies (curl, wget, netcat, etc...)
+# httpclient
+
+a POSIX-compliant http client library for bash/[amber](https://amber-lang.org) without using external dependencies
 
 
 ## info
